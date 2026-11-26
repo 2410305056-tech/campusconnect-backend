@@ -1,0 +1,32 @@
+# Render Blueprint — CampusConnect API
+# Docs: https://render.com/docs/blueprint-spec
+# Use in Render dashboard: New + → Blueprint → select 2410305056-tech/campusconnect-backend
+# Variables marked `sync: false` prompt you ONCE for the value at creation time
+# (copy them from campusconnect/backend/.env — never commit real values).
+
+services:
+  - type: web
+    name: campusconnect-api
+    runtime: node
+    plan: free
+    region: singapore
+    rootDir: .                 # repo root = backend folder
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
+    autoDeploy: true           # every push to main deploys automatically
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000           # Render injects its own port; server reads process.env.PORT
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SECRET_KEY
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true    # Render generates a strong random secret
+      - key: FRONTEND_URL
+        sync: false            # e.g. https://your-app.vercel.app
